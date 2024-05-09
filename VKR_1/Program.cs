@@ -1,3 +1,7 @@
+using DAL.EfStructures;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+
 namespace VKR_1
 {
     public class Program
@@ -7,7 +11,17 @@ namespace VKR_1
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+            var connectionString = builder.Configuration.GetConnectionString("MSSQL");
+            builder.Services.AddDbContext<ApplicationDBContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
+            });
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options => options.LoginPath = "/account");
+            builder.Services.AddAuthorization();
 
             var app = builder.Build();
 
