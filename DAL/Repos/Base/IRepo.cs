@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repos.Base
 {
-    internal interface IRepo<T>:IDisposable
+    public interface IRepo<T>:IDisposable
     {
         int Add(T entity, bool persist = true);
         int AddRange(IEnumerable<T> entities, bool persist = true);
