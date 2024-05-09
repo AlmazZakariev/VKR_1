@@ -20,22 +20,22 @@ public partial class Registration:BaseEntity
 
     [Required]
     [Column("room_id")]
-    public int RoomId { get; set; }
+    public long RoomId { get; set; }
 
     [Column("date", TypeName = "datetime")]
     public DateTime Date { get; set; }
 
     [ForeignKey("AdministratorId")]
     [InverseProperty("Registrations")]
-    public virtual User Administrator { get; set; } = null!;
+    public  User Administrator { get; set; } = null!;
 
     [ForeignKey("RequestId")]
     [InverseProperty("Registrations")]
-    public virtual Request Request { get; set; } = null!;
+    public  Request Request { get; set; } = null!;
 
     [ForeignKey("RoomId")]
     [InverseProperty("Registrations")]
-    public virtual Room Room { get; set; } = null!;
+    public  Room Room { get; set; } = null!;
 
     public override string ToString()
     {
