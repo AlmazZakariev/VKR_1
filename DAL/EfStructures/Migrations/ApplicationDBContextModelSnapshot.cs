@@ -47,11 +47,6 @@ namespace DAL.EfStructures.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("room_id");
 
-                    b.Property<byte[]>("TimeStamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AdministratorId");
@@ -79,11 +74,6 @@ namespace DAL.EfStructures.Migrations
                     b.Property<DateTime?>("PreferenceDate")
                         .HasColumnType("datetime")
                         .HasColumnName("preference_date");
-
-                    b.Property<byte[]>("TimeStamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint")
@@ -124,11 +114,6 @@ namespace DAL.EfStructures.Migrations
                     b.Property<short>("Number")
                         .HasColumnType("smallint")
                         .HasColumnName("number");
-
-                    b.Property<byte[]>("TimeStamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
@@ -252,11 +237,6 @@ namespace DAL.EfStructures.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("surname");
-
-                    b.Property<byte[]>("TimeStamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 

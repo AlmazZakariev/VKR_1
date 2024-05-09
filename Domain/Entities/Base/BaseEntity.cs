@@ -14,7 +14,7 @@ namespace Domain.Entities.Base
         [Column("id")]
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
-        [Timestamp]
-        public byte[]? TimeStamp { get; set; }
+        //[Timestamp]
+        //public byte[]? TimeStamp { get; set; }
     }
 }
