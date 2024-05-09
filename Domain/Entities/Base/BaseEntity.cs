@@ -11,6 +11,7 @@ namespace Domain.Entities.Base
 {
     public class BaseEntity
     {
+        [Column("id")]
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         //[Timestamp]
