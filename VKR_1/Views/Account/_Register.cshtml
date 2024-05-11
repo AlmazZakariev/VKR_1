@@ -11,8 +11,8 @@
                 <input asp-for="Email"
                        type="text"
                        class="form-control"
-                       placeholder="Введите пароль" />
-                <label asp-for="Email" class="form-label">Логин</label>
+                       placeholder="Введите email" />
+                <label asp-for="Email" class="form-label">Email</label>
             </div>
         </div>
         <span class="text-danger" asp-validation-for="Email"></span>
@@ -51,6 +51,73 @@
         </div>
         <span class="text-danger" asp-validation-for="RepeatPassword"></span>
     </div>
+
+
+    <div class="mb-3">
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="fa-solid fa-user"></i>
+            </span>
+            <div class="form-floating">
+                <input asp-for="Phone"
+                       type="number"
+                       class="form-control"
+                       placeholder="Введите номер телефона" />
+                <label asp-for="Phone" class="form-label">Номер телефона</label>
+            </div>
+        </div>
+        <span class="text-danger" asp-validation-for="Phone"></span>
+    </div>
+
+    <div class="mb-3">
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="fa-solid fa-user"></i>
+            </span>
+            <div class="form-floating">
+                <input asp-for="Surname"
+                       type="text"
+                       class="form-control"
+                       placeholder="Введите фамилию" />
+                <label asp-for="Surname" class="form-label">Фамилия</label>
+            </div>
+        </div>
+        <span class="text-danger" asp-validation-for="Surname"></span>
+    </div>
+
+    <div class="mb-3">
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="fa-solid fa-user"></i>
+            </span>
+            <div class="form-floating">
+                <input asp-for="Name"
+                       type="text"
+                       class="form-control"
+                       placeholder="Введите имя" />
+                <label asp-for="Name" class="form-label">Имя</label>
+            </div>
+        </div>
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </div>
+
+    <div class="mb-3">
+        <div class="input-group">
+            <span class="input-group-text">
+                <i class="fa-solid fa-user"></i>
+            </span>
+            <div class="form-floating">
+                <input asp-for="Patronymic"
+                       type="text"
+                       class="form-control"
+                       placeholder="Введите отчество" />
+                <label asp-for="Patronymic" class="form-label">Отчество</label>
+            </div>
+        </div>
+        <span class="text-danger" asp-validation-for="Patronymic"></span>
+    </div>
+
+
 
     <div class="text-danger mb-2">@ViewBag.RegisterError</div>
     <button type="submit" class="btn btn-primary w-100">Создать аккаунт</button>

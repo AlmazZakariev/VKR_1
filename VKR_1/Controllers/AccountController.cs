@@ -7,93 +7,106 @@ using System.Security.Claims;
 using VKR_1.Models.Account;
 using DAL.EfStructures;
 using Microsoft.EntityFrameworkCore;
+using DAL.Controllers;
 
 namespace VKR_1.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
-        //private readonly ApplicationDBContext _context;
+        private readonly ApplicationDBContext _context;
 
-        //public AccountController(ApplicationDBContext context)
-        //{
-        //    _context = context;
-        //}
+        public AccountController(ApplicationDBContext context)
+        {
+            _context = context;
+        }
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+        public IActionResult Index()
+        {
+            return View();
+        }
 
-        //public async Task<IActionResult> LoginAsync([Bind(Prefix = "l")] LoginViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View("Index", new AccountViewModel
-        //        {
-        //            LoginViewModel = model
-        //        });
-        //    }
+        public async Task<IActionResult> LoginAsync([Bind(Prefix = "l")] LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index", new AccountViewModel
+                {
+                    LoginViewModel = model
+                });
+            }
 
-        //    var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email &&
-        //        u.Pass == model.Password);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
 
-        //    if (user is null)
-        //    {
-        //        ViewBag.Error = "Некорректные логин и(или) пароль";
-        //        return View("Index", new AccountViewModel
-        //        {
-        //            LoginViewModel = model
-        //        });
-        //    }
 
-        //    await AuthenticateAsync(user);
-        //    return RedirectToAction("Index", "Home");
-        //}
+            if (user is null)
+            {
+                ViewBag.Error = "Некорректные логин и(или) пароль";
+                return View("Index", new AccountViewModel
+                {
+                    LoginViewModel = model
+                });
+            }
+            else
+            {
+                var correctPass = SecretHasher.Verify(model.Password, user.Pass);
+                if (!correctPass)
+                {
+                    ViewBag.Error = "Некорректные логин и(или) пароль";
+                    return View("Index", new AccountViewModel
+                    {
+                        LoginViewModel = model
+                    });
+                }               
+            }
 
-        //private async Task AuthenticateAsync(User user)
-        //{
-        //    var claims = new List<Claim>
-        //    {
-        //        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-        //        new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email)
-        //    };
+            await AuthenticateAsync(user);
+            return RedirectToAction("Index", "Home");
+        }
 
-        //    var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-        //    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
-        //}
+        private async Task AuthenticateAsync(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email)
+            };
 
-        //public async Task<IActionResult> RegisterAsync([Bind(Prefix = "r")] RegisterViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View("Index", new AccountViewModel
-        //        {
-        //            RegisterViewModel = model
-        //        });
-        //    }
+            var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
 
-        //    var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-        //    if (user != null)
-        //    {
-        //        ViewBag.RegisterError = "Пользователь с таким логином уже существует!";
-        //        return View("Index", new AccountViewModel
-        //        {
-        //            RegisterViewModel = model
-        //        });
-        //    }
+        public async Task<IActionResult> RegisterAsync([Bind(Prefix = "r")] RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index", new AccountViewModel
+                {
+                    RegisterViewModel = model
+                });
+            }
 
-        //    user = new User(model.Email, model.Password, model.);
-        //    await _context.Users.AddAsync(user);
-        //    await _context.SaveChangesAsync();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+            if (user != null)
+            {
+                ViewBag.RegisterError = "Пользователь с таким логином уже существует!";
+                return View("Index", new AccountViewModel
+                {
+                    RegisterViewModel = model
+                });
+            }
 
-        //    await AuthenticateAsync(user);
-        //    return RedirectToAction("Index", "Home");
-        //}
+            user = new User{Name = model.Name, Surname = model.Surname, Patronymic = model.Patronymic, Email = model.Email, Phone = model.Phone, Pass = SecretHasher.Hash(model.Password), Admin = [0] };
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
 
-        //public async Task<IActionResult> LogoutAsync()
-        //{
-        //    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        //    return RedirectToAction("Login", "Account");
-        //}
+            await AuthenticateAsync(user);
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> LogoutAsync()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Account");
+        }
     }
 }

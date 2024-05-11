@@ -56,6 +56,6 @@ public partial class User : BaseEntity
 
     public override string ToString()
     {
-        return $"{Surname} {Name} {Patronymic} is admin = {Admin[0] == '1'}, id = {Id}";
+        return $"{Surname} {Name} {Patronymic} - {(Admin[0] == 0? "СТУДЕНТ": "АДМИНИСТРАТОР")}, id = {Id}, phone = {Phone}, email = {Email}, pass = {Pass}";
     }
 }

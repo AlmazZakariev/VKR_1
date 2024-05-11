@@ -1,5 +1,6 @@
 using DAL.EfStructures;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace VKR_1
@@ -19,9 +20,29 @@ namespace VKR_1
                 options.UseSqlServer(connectionString);
             });
 
+
+            builder.Services.Configure<IdentityOptions>(options =>
+            {
+                // Default Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+            });
+
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options => options.LoginPath = "/account");
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Account";
+            });
+
             builder.Services.AddAuthorization();
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account";
+                options.SlidingExpiration = true;
+            });
+
+
 
             var app = builder.Build();
 
