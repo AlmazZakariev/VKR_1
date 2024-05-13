@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{8983AD6B-F0D2-42FD-8E67-86B43E08A1D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.Tests", "DAL.Tests\DAL.Tests.csproj", "{FA4B170F-FFB6-42E4-884B-31D1394DE758}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL.Tests", "DAL.Tests\DAL.Tests.csproj", "{FA4B170F-FFB6-42E4-884B-31D1394DE758}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

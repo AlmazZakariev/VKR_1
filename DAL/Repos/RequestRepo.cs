@@ -15,11 +15,16 @@ namespace DAL.Repos
     {
         public RequestRepo(ApplicationDBContext context) : base(context)
         {
-                
+
         }
         public RequestRepo(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
-                
+
+        }
+
+        public Task<Request> GetRequestByUser(User user)
+        {
+            return Context.Requests.FirstOrDefaultAsync(x => x.UserId == user.Id);
         }
     }
 }

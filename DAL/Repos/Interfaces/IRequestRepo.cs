@@ -5,5 +5,6 @@ namespace DAL.Repos.Interfaces
 {
     public interface IRequestRepo:IRepo<Request>
     {
+        public Request GetRequestByUser(User user);
     }
 }

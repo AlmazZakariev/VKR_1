@@ -1,0 +1,22 @@
+﻿@using VKR_1.Models.Home;
+@model HomeViewModel
+
+@{
+    ViewData["Title"] = "Информация о заявке";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2>Информация о заявке</h2>
+            <div class="form-group">
+                <label asp-for="Request.Date">Дата заявки</label>
+                <p class="form-control-plaintext">@Model.Request.Date.ToString("dd.MM.yyyy")</p>
+            </div>
+            <div class="form-group">
+                <label asp-for="Request.PreferenceDate">Предпочитаемая дата</label>
+                <p class="form-control-plaintext">@Model.Request.Date.ToString("dd.MM.yyyy")</p>
+            </div>
+        </div>
+    </div>
+</div>

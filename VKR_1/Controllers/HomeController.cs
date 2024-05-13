@@ -1,34 +1,74 @@
+using DAL.EfStructures;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Diagnostics;
 using VKR_1.Models;
+using VKR_1.Models.Home;
 
 namespace VKR_1.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
 
-        //public HomeController(ILogger<HomeController> logger)
-        //{
-        //    _logger = logger;
-        //}
 
-        public IActionResult Index()
+        private readonly ApplicationDBContext _context;
+
+        public HomeController(ApplicationDBContext context)
         {
-            return View();
+            _context = context;
         }
 
-        //public IActionResult Privacy()
-        //{
-        //    return View();
-        //}
+        public async Task<IActionResult> IndexAsync()
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
+        {
+            Request? request = GetRequestCurrentUserAsync().Result;
+            if (request != null)
+            {
+                return View("_ShowRequest", new HomeViewModel{
+                    
+                    Request = request
+
+                });
+            }
+            else
+            {
+                return View("_CreateRequest", new HomeViewModel
+                {
+                   
+                });
+            }   
+        }
+
+
+        public async Task<IActionResult> CreateAsync(HomeViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Request = await GetRequestCurrentUserAsync();
+                return View("Index", model);
+            }
+
+            await _context.Requests.AddAsync(new Request
+            {
+                Date = DateTime.Now,
+                PreferenceDate = model.PreferenceDate,
+                UserId = CurrentUserId
+            });
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        private async Task<Request?> GetRequestCurrentUserAsync()
+        {
+            return await _context.Requests
+                .FirstOrDefaultAsync(x => x.UserId == CurrentUserId);
+ 
+        }
+
     }
 }
