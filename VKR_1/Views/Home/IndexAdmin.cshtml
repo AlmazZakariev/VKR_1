@@ -1,0 +1,67 @@
+﻿@page
+@model VKR_1.Models.Home.HomeViewModelAdmin
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - Your Application</title>
+
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/YourApplication.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Список заявок</h2>
+                <div class="card">
+                    <div class="card-body">
+                        @foreach (var request in Model.Requests)
+                        {
+                          <div class="request-item">
+                              <h5>@request.Surname</h5>
+                              <p>@request.PreferenceDate.ToString("dd.MM.yyyy")</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Администраторы</h4>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var admin in Model.Admins)
+                        {
+                            <div class="admin-item">
+                                <h5>@admin.FullName</h5>
+                                <p>@admin.PhoneNumber</p>
+                                <p>@admin.Email</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h4>Даты заселения</h4>
+                    </div>
+                    <div class="card-body">
+                        <input type="date" id="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" @(Model.DatesSet ? "disabled" : "") />
+                        <input type="date" id="endDate" class="form-control mt-2" value="@Model.EndDate.ToString("yyyy-MM-dd")" @(Model.DatesSet ? "disabled" : "") />
+                        <button type="button" class="btn btn-primary mt-2" @(Model.DatesSet ? "disabled" : "")>Подтвердить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>
