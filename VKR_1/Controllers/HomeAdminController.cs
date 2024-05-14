@@ -30,6 +30,7 @@ namespace VKR_1.Controllers
         private async Task<IEnumerable<Request>> GetRequestsAsync()
         {
             return await _context.Requests
+                .Include(r => r.User)
                 .ToListAsync();
         }
         private async Task<IEnumerable<User>> GetAdminsAsync()
