@@ -16,5 +16,8 @@ namespace Domain.Entities.Base
         public long Id { get; set; }
         [Timestamp]
         public byte[]? TimeStamp { get; set; }
+
+        
     }
+ 
 }

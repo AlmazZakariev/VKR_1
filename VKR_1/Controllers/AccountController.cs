@@ -60,7 +60,7 @@ namespace VKR_1.Controllers
             }
 
             await AuthenticateAsync(user);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", RedirectToHomeString(user));
         }
 
         private async Task AuthenticateAsync(User user)
@@ -100,13 +100,26 @@ namespace VKR_1.Controllers
             await _context.SaveChangesAsync();
 
             await AuthenticateAsync(user);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", RedirectToHomeString(user));
         }
 
         public async Task<IActionResult> LogoutAsync()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
+        }
+
+        private string RedirectToHomeString(User user)
+        {
+            if (user.Admin[0] == 0)
+            {
+
+                return "Home";
+            }
+            else
+            {
+                return "HomeAdmin";
+            }
         }
     }
 }

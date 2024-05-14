@@ -1,13 +1,13 @@
 ﻿using Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace VKR_1.Models.Home
+namespace VKR_1.Models.HomeAdmin
 {
     public class HomeViewModelAdmin
     {
-        public Request? Requests { get; set; }
+        public IEnumerable<Request>? Requests { get; set; }
 
-        public User? Admins { get; set; }
+        public IEnumerable<User>? Admins { get; set; }
         [Required]
         [Display(Name = "Старт")]
         [DataType(DataType.Date)]
@@ -17,7 +17,6 @@ namespace VKR_1.Models.Home
         [DataType(DataType.Date)]
 
         public DateTime EndDate { get; set; }
-
         public bool DatesSet { get; set; }
     }
 }

@@ -1,5 +1,5 @@
-﻿@page
-@model VKR_1.Models.Home.HomeViewModelAdmin
+﻿@using VKR_1.Models.HomeAdmin;
+@model HomeViewModelAdmin
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -23,8 +23,8 @@
                         @foreach (var request in Model.Requests)
                         {
                           <div class="request-item">
-                              <h5>@request.Surname</h5>
-                              <p>@request.PreferenceDate.ToString("dd.MM.yyyy")</p>
+                              <h5>@request.UserId</h5>
+                              <p>@request.PreferenceDate?.ToString("dd.MM.yyyy")</p>
                             </div>
                         }
                     </div>
@@ -39,8 +39,9 @@
                         @foreach (var admin in Model.Admins)
                         {
                             <div class="admin-item">
-                                <h5>@admin.FullName</h5>
-                                <p>@admin.PhoneNumber</p>
+                                <h5>@admin.Surname</h5>
+                                <h5>@admin.Name</h5>
+                                <p>@admin.Phone</p>
                                 <p>@admin.Email</p>
                             </div>
                         }

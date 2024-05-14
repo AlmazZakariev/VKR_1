@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using System.Collections;
 using System.Diagnostics;
 using VKR_1.Models;
 using VKR_1.Models.Home;
@@ -26,21 +27,24 @@ namespace VKR_1.Controllers
 
         {
             Request? request = GetRequestCurrentUserAsync().Result;
-            if (request != null)
-            {
-                return View("_ShowRequest", new HomeViewModel{
-                    
-                    Request = request
+            
+                    if (request != null)
+                    {
+                        return View("_ShowRequest", new HomeViewModel
+                        {
 
-                });
-            }
-            else
-            {
-                return View("_CreateRequest", new HomeViewModel
-                {
-                   
-                });
-            }   
+                            Request = request
+
+                        });
+                    }
+                    else
+                    {
+                        return View("_CreateRequest", new HomeViewModel
+                        {
+
+                        });
+                 }
+
         }
 
 
@@ -67,8 +71,9 @@ namespace VKR_1.Controllers
         {
             return await _context.Requests
                 .FirstOrDefaultAsync(x => x.UserId == CurrentUserId);
- 
+
         }
+       
 
     }
 }
