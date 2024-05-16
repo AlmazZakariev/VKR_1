@@ -8,11 +8,11 @@ namespace VKR_1.Models.HomeAdmin
         public IEnumerable<Request>? Requests { get; set; }
 
         public IEnumerable<User>? Admins { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Данное поле обязательно")]
         [Display(Name = "Старт")]
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Данное поле обязательно")]
         [Display(Name = "Финиш")]
         [DataType(DataType.Date)]
 

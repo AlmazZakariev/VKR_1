@@ -2,7 +2,6 @@
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using VKR_1.Models.Home;
 using VKR_1.Models.HomeAdmin;
 
 namespace VKR_1.Controllers
