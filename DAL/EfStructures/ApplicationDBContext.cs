@@ -71,6 +71,9 @@ public partial class ApplicationDBContext : DbContext
     public DbSet<Room>? Rooms { get; set; }
 
     public DbSet<User>? Users { get; set; }
+    public DbSet<General>? General { get; set; }
+    public DbSet<TimeSlot>? TimeSlots { get; set; }
+
     public DbSet<SeriLogEntry>? LogEntries {get;set;}
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -99,11 +102,25 @@ public partial class ApplicationDBContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Requests)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_requests_users");
+
+            entity.HasOne(d => d.TimeSlot).WithOne(p => p.Request)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("FK_requests_time_slots");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
             entity.Property(e => e.Admin).IsFixedLength();
+        });
+
+        modelBuilder.Entity<TimeSlot>(entity =>
+        {
+            entity.HasOne(d => d.Administrator).WithMany(p => p.TimeSlots)
+            .OnDelete(DeleteBehavior.Restrict)
+            .HasConstraintName("FK_time_slots_users");
+
+            entity.Property(e => e.Free).IsFixedLength();
+
         });
 
         modelBuilder.Entity<SeriLogEntry>(entity =>

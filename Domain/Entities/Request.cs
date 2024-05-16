@@ -22,13 +22,22 @@ public partial class Request:BaseEntity
     [Column("user_id")]
     public long UserId { get; set; }
 
+    //[Required]
+    //[Column("time_slot_id")]
+    //public long TimeSlotId { get; set; }
+
     [JsonIgnore]
     [InverseProperty("Request")]
     public  ICollection<Registration> Registrations { get; set; } = new List<Registration>();
 
     [ForeignKey("UserId")]
     [InverseProperty("Requests")]
-    public  User User { get; set; } = null!;
+    public User User { get; set; } = null!;
+
+    [ForeignKey("TimeSlotId")]
+    [InverseProperty("Request")]
+    public  TimeSlot? TimeSlot { get; set; } = null!;
+
     public override string ToString()
     {
         return $"requset from {User} at {Date}, preference date is {PreferenceDate}";

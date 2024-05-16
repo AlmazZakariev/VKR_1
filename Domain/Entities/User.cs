@@ -54,6 +54,9 @@ public partial class User : BaseEntity
     [InverseProperty("User")]
     public  ICollection<Request> Requests { get; set; } = new List<Request>();
 
+    [JsonIgnore]
+    [InverseProperty("Administrator")]
+    public ICollection<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
     public override string ToString()
     {
         return $"{Surname} {Name} {Patronymic} - {(Admin[0] == 0? "СТУДЕНТ": "АДМИНИСТРАТОР")}, id = {Id}, phone = {Phone}, email = {Email}, pass = {Pass}";

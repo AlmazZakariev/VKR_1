@@ -43,37 +43,40 @@
                 </div>
                 
             </div>
-
-            <div class="col-md-4">
-                <h2>Информация</h2>
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Администраторы</h4>
+            
+                <div class="col-md-4">
+                    <h2>Информация</h2>
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Администраторы</h4>
+                        </div>
+                        <div class="card-body">
+                            @foreach (var admin in Model.Admins)
+                            {
+                                <div class="admin-item">
+                                    <h5>@admin.Surname</h5>
+                                    <h5>@admin.Name</h5>
+                                    <p>@admin.Phone</p>
+                                    <p>@admin.Email</p>
+                                </div>
+                            }
+                        </div>
                     </div>
-                    <div class="card-body">
-                        @foreach (var admin in Model.Admins)
-                        {
-                            <div class="admin-item">
-                                <h5>@admin.Surname</h5>
-                                <h5>@admin.Name</h5>
-                                <p>@admin.Phone</p>
-                                <p>@admin.Email</p>
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h4>Даты заселения</h4>
+                        </div>
+                        <form asp-action="CreateGeneral">
+                            <div class="card-body">
+                                <input type="date" id="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" @(Model.DatesSet ? "disabled" : "") />
+                                <input type="date" id="endDate" class="form-control mt-2" value="@Model.EndDate.ToString("yyyy-MM-dd")" @(Model.DatesSet ? "disabled" : "") />
+                            <button type="submit" class="btn btn-primary mt-2" @(Model.DatesSet ? "disabled" : "")>Подтвердить</button>
                             </div>
-                        }
+                        </form>
                     </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <h4>Даты заселения</h4>
-                    </div>
-                    <div class="card-body">
-                        <input type="date" id="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" @(Model.DatesSet ? "disabled" : "") />
-                        <input type="date" id="endDate" class="form-control mt-2" value="@Model.EndDate.ToString("yyyy-MM-dd")" @(Model.DatesSet ? "disabled" : "") />
-                        <button type="button" class="btn btn-primary mt-2" @(Model.DatesSet ? "disabled" : "")>Подтвердить</button>
-                    </div>
-                </div>
 
-            </div>
+                </div>
+           
         </div>
     </div>
 
