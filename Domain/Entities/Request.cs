@@ -22,21 +22,21 @@ public partial class Request:BaseEntity
     [Column("user_id")]
     public long UserId { get; set; }
 
-    //[Required]
-    //[Column("time_slot_id")]
-    //public long TimeSlotId { get; set; }
+    [Required]
+    [Column("time_slot_id")]
+    public long TimeSlotId { get; set; }
 
     [JsonIgnore]
     [InverseProperty("Request")]
-    public  ICollection<Registration> Registrations { get; set; } = new List<Registration>();
+    public  Registration? Registration { get; set; } 
 
     [ForeignKey("UserId")]
-    [InverseProperty("Requests")]
+    [InverseProperty("Request")]
     public User User { get; set; } = null!;
 
     [ForeignKey("TimeSlotId")]
     [InverseProperty("Request")]
-    public  TimeSlot? TimeSlot { get; set; } = null!;
+    public TimeSlot TimeSlot { get; set; } = null!;
 
     public override string ToString()
     {

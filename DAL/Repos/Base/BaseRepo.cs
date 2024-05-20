@@ -51,86 +51,86 @@ namespace DAL.Repos.Base
             _isDisposed = true; ;
         }
 
-        public virtual int Add(T entity, bool persist = true)
+        public virtual async ValueTask<int> AddAsync(T entity, bool persist = true)
         {
-            Table.Add(entity);
-            return persist ? SaveChanges() : 0;
+            await Table.AddAsync(entity);
+            return persist ?  await SaveChangesAsync() : 0;
         }
 
-        public virtual int AddRange(IEnumerable<T> entities, bool persist = true)
-        {
-            Table.AddRange(entities);
-            return persist ? SaveChanges() : 0;
-        }
+        //public virtual int AddRange(IEnumerable<T> entities, bool persist = true)
+        //{
+        //    Table.AddRange(entities);
+        //    return persist ? SaveChanges() : 0;
+        //}
 
-        public virtual int Update(T entity, bool persist = true)
+        public virtual async ValueTask<int> UpdateAsync(T entity, bool persist = true)
         {
             Table.Update(entity);
-            return persist ? SaveChanges() : 0;
+            return  persist ? await SaveChangesAsync() : 0;
         }
 
-        public virtual int UpdateRange(IEnumerable<T> entities, bool persist = true)
-        {
-            Table.UpdateRange(entities);
-            return persist ? SaveChanges() : 0;
-        }
+        //public virtual int UpdateRange(IEnumerable<T> entities, bool persist = true)
+        //{
+        //    Table.UpdateRange(entities);
+        //    return persist ? SaveChanges() : 0;
+        //}
 
-        public virtual int Delete(int id, byte[] timeStamp, bool persist = true)
-        {
-            var entity = new T { Id = id, TimeStamp = timeStamp };
-            Context.Entry(entity).State = EntityState.Deleted;
-            return persist ? SaveChanges() : 0;
-        }
+        //public virtual int Delete(int id, byte[] timeStamp, bool persist = true)
+        //{
+        //    var entity = new T { Id = id, TimeStamp = timeStamp };
+        //    Context.Entry(entity).State = EntityState.Deleted;
+        //    return persist ? SaveChanges() : 0;
+        //}
 
-        public virtual int Delete(T entity, bool persist = true)
+        public virtual async ValueTask<int> DeleteAsync(T entity, bool persist = true)
         {
             Table.Remove(entity);
-            return persist ? SaveChanges() : 0;
+            return persist ? await SaveChangesAsync() : 0;
         }
 
-        public virtual int DeleteRange(IEnumerable<T> entities, bool persist = true)
+        //public virtual int DeleteRange(IEnumerable<T> entities, bool persist = true)
+        //{
+        //    Table.RemoveRange(entities);
+        //    return persist ? SaveChanges() : 0;
+        //}
+
+        public virtual async ValueTask<T?> FindAsync(long? id)
         {
-            Table.RemoveRange(entities);
-            return persist ? SaveChanges() : 0;
+            return await Table.FindAsync(id);
         }
 
-        public virtual T? Find(int? id)
-        {
-            return Table.Find(id);
-        }
+        //public virtual T? FindAsNoTracking(int id)
+        //{
+        //    return Table.AsNoTrackingWithIdentityResolution()
+        //        .FirstOrDefault(x => x.Id == id);
+        //}
 
-        public virtual T? FindAsNoTracking(int id)
-        {
-            return Table.AsNoTrackingWithIdentityResolution()
-                .FirstOrDefault(x => x.Id == id);
-        }
-
-        public T? FindIgnoreQueryFilters(int id)
-        {
-            return Table.IgnoreQueryFilters()
-                .FirstOrDefault(x => x.Id == id);
-        }
+        //public T? FindIgnoreQueryFilters(int id)
+        //{
+        //    return Table.IgnoreQueryFilters()
+        //        .FirstOrDefault(x => x.Id == id);
+        //}
 
         public virtual IEnumerable<T> GetAll()
         {
             return Table;
         }
 
-        public virtual IEnumerable<T> GetAllIgnoreQueryFilters()
-        {
-            return Table.IgnoreQueryFilters();
-        }
+        //public virtual IEnumerable<T> GetAllIgnoreQueryFilters()
+        //{
+        //    return Table.IgnoreQueryFilters();
+        //}
 
         public void ExecuteQuery(string sql, object[] sqlParametersObject)
         {
             Context.Database.ExecuteSqlRaw(sql, sqlParametersObject);
         }
 
-        public int SaveChanges()
+        public async ValueTask<int> SaveChangesAsync()
         {
             try
             {
-                return Context.SaveChanges();
+                return await Context.SaveChangesAsync();
             }
             catch (CustomException ex)
             {

@@ -11,7 +11,6 @@ namespace Domain.Entities;
 [Table("users")]
 public partial class User : BaseEntity
 {
-
     [Column("email")]
     [StringLength(255)]
     [Unicode(false)]
@@ -42,6 +41,9 @@ public partial class User : BaseEntity
     [Unicode(false)]
     public string Phone { get; set; } = null!;
 
+    [Column("gender")]
+    public short? Gender { get; set; }
+
     [Column("admin")]
     [MaxLength(1)]
     public byte[] Admin { get; set; } = null!;
@@ -52,13 +54,14 @@ public partial class User : BaseEntity
 
     [JsonIgnore]
     [InverseProperty("User")]
-    public  ICollection<Request> Requests { get; set; } = new List<Request>();
+    public Request Request { get; set; } = null!;
 
     [JsonIgnore]
     [InverseProperty("Administrator")]
     public ICollection<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
     public override string ToString()
     {
-        return $"{Surname} {Name} {Patronymic} - {(Admin[0] == 0? "СТУДЕНТ": "АДМИНИСТРАТОР")}, id = {Id}, phone = {Phone}, email = {Email}, pass = {Pass}";
+        return $"{Surname} {Name} {Patronymic} - {(Admin[0] == 0? "СТУДЕНТ": "АДМИНИСТРАТОР")}," +
+            $" id = {Id}, phone = {Phone}, email = {Email}, pass = {Pass}";
     }
 }

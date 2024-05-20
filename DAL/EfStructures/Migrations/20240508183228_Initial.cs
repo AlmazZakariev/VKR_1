@@ -15,7 +15,7 @@ namespace DAL.EfStructures.Migrations
                 name: "rooms",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    id = table.Column<int>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     floor = table.Column<short>(type: "smallint", nullable: false),
                     number = table.Column<short>(type: "smallint", nullable: false),
@@ -75,7 +75,7 @@ namespace DAL.EfStructures.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     request_id = table.Column<long>(type: "bigint", nullable: false),
                     administrator_id = table.Column<long>(type: "bigint", nullable: false),
-                    room_id = table.Column<int>(type: "int", nullable: false),
+                    room_id = table.Column<int>(type: "bigint", nullable: false),
                     date = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>

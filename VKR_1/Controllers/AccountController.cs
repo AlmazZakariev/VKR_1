@@ -8,16 +8,18 @@ using VKR_1.Models.Account;
 using DAL.EfStructures;
 using Microsoft.EntityFrameworkCore;
 using DAL.Controllers;
+using DAL.Repos;
 
 namespace VKR_1.Controllers
 {
     public class AccountController : BaseController
     {
-        private readonly ApplicationDBContext _context;
-
+        //private readonly ApplicationDBContext _context;
+        private readonly UserRepo _userRepo;
         public AccountController(ApplicationDBContext context)
         {
-            _context = context;
+            //_context = context;
+            _userRepo = new UserRepo(context);
         }
 
         public IActionResult Index()
@@ -35,8 +37,7 @@ namespace VKR_1.Controllers
                 });
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-
+            var user = await _userRepo.FindByEmailAsync(model.Email);
 
             if (user is null)
             {
@@ -60,7 +61,7 @@ namespace VKR_1.Controllers
             }
 
             await AuthenticateAsync(user);
-            return RedirectToAction("Index", RedirectToHomeString(user));
+            return RedirectToAction("Index", "Home");
         }
 
         private async Task AuthenticateAsync(User user)
@@ -85,7 +86,7 @@ namespace VKR_1.Controllers
                 });
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+            var user = await _userRepo.FindByEmailAsync(model.Email);
             if (user != null)
             {
                 ViewBag.RegisterError = "Пользователь с таким логином уже существует!";
@@ -95,12 +96,13 @@ namespace VKR_1.Controllers
                 });
             }
 
-            user = new User{Name = model.Name, Surname = model.Surname, Patronymic = model.Patronymic, Email = model.Email, Phone = model.Phone, Pass = SecretHasher.Hash(model.Password), Admin = [0] };
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            user = new User{Name = model.Name, Surname = model.Surname, Patronymic = model.Patronymic, Email = model.Email, Phone = model.Phone, Pass = SecretHasher.Hash(model.Password), Admin = [0], Gender = model.Gender };
+            await _userRepo.AddAsync(user);
+            //await _context.Users.AddAsync(user);
+            //await _context.SaveChangesAsync();
 
             await AuthenticateAsync(user);
-            return RedirectToAction("Index", RedirectToHomeString(user));
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> LogoutAsync()
@@ -109,17 +111,6 @@ namespace VKR_1.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        private string RedirectToHomeString(User user)
-        {
-            if (user.Admin[0] == 0)
-            {
-
-                return "Home";
-            }
-            else
-            {
-                return "HomeAdmin";
-            }
-        }
+        
     }
 }

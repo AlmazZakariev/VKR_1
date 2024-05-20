@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace DAL.Repos
 {
@@ -16,5 +17,14 @@ namespace DAL.Repos
     {
         public UserRepo(ApplicationDBContext context) : base(context) { }
         internal UserRepo(DbContextOptions<ApplicationDBContext> options) : base(options) { }
+
+        public async ValueTask<User?> FindByEmailAsync(string email)
+        {
+            return await Context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+        public async ValueTask<IEnumerable<User?>> FindAllAdminsAsync()
+        {
+            return await Context.Users.Where(u => u.Admin[0] == 1).ToListAsync();
+        }
     }
 }

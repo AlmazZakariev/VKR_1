@@ -12,7 +12,7 @@ namespace DAL.Initialization
             context.Database.EnsureDeleted();
             context.Database.Migrate();
         }
-        internal static void ClearData(ApplicationDBContext context)
+        public static void ClearData(ApplicationDBContext context)
         {
             var entities = new[]
             {
@@ -88,5 +88,7 @@ namespace DAL.Initialization
             ClearData(context);
             SeedData(context);
         }
+
+        
     }
 }

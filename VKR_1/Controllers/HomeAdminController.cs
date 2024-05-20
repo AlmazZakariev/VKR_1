@@ -1,22 +1,45 @@
 ﻿using DAL.EfStructures;
+using DAL.Repos;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using VKR_1.Models.Account;
 using VKR_1.Models.HomeAdmin;
 
 namespace VKR_1.Controllers
 {
-    public class HomeAdminController:BaseController
+    [Authorize]
+    public class HomeAdminController : BaseController
     {
         private readonly ApplicationDBContext _context;
-
+        private readonly UserRepo _userRepo;
+        private readonly GeneralRepo _generalRepo;
+        private readonly TimeSlotRepo _timeSlotRepo;
         public HomeAdminController(ApplicationDBContext context)
         {
             _context = context;
+            _userRepo = new UserRepo(context);
+            _generalRepo = new GeneralRepo(context);
+            _timeSlotRepo = new TimeSlotRepo(context);
         }
 
         public async Task<IActionResult> IndexAsync()
         {
+
+            var currentUser = await _userRepo.FindAsync(CurrentUserId);
+            if (currentUser == null)
+            {
+                return View("Index", new AccountViewModel
+                {
+
+                });
+            }
+            if (currentUser.Admin[0] == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var general = GetGeneralAsync().Result;
             DateTime start = DateTime.Now;
             DateTime end = DateTime.Now;
@@ -27,23 +50,23 @@ namespace VKR_1.Controllers
                 start = general.StartDate;
                 end = general.EndDate;
             }
-           
+
             return View("Index", new HomeViewModelAdmin
             {
-                    Requests = await GetRequestsAsync(),
-                    Admins = await GetAdminsAsync(),
-                    StartDate = start,
-                    EndDate = end,
-                    DatesSet = set
+                Requests = await GetRequestsAsync(),
+                Admins = await GetAdminsAsync(),
+                StartDate = start,
+                EndDate = end,
+                DatesSet = set
             });
-            
+
 
         }
 
         public async Task<IActionResult> CreateGeneralAsync(HomeViewModelAdmin model)
         {
-
-            await _context.General.AddAsync(new General
+    
+            await _generalRepo.AddAsync(new General
             {
                 StartDate = model.StartDate,
                 EndDate = model.EndDate,
@@ -51,7 +74,8 @@ namespace VKR_1.Controllers
 
             });
 
-            await _context.SaveChangesAsync();
+            await CreateTimeSlots();
+
             return RedirectToAction("Index");
         }
 
@@ -71,6 +95,47 @@ namespace VKR_1.Controllers
         private async Task<General?> GetGeneralAsync()
         {
             return await _context.General.FirstOrDefaultAsync(g => g.Id > 1);
+        }
+
+        private async ValueTask<int> CreateTimeSlots()
+        {
+            var admins = await _userRepo.FindAllAdminsAsync();
+            var general = await _generalRepo.FindSingle();
+            List<TimeSlot> timeSlots = new List<TimeSlot>();
+
+            foreach (var admin in admins)
+            {
+                foreach (DateTime day in EachDay(general.StartDate, general.EndDate))
+                {
+                    foreach (DateTime time in Each15Min(day))
+                    {
+                        timeSlots.Add(CreateTimeSlot(admin.Id, time));
+                    }
+                }
+            }
+            return await _timeSlotRepo.AddRangeAsync(timeSlots);
+        }
+        private TimeSlot CreateTimeSlot(long adminId, DateTime time)
+        {
+            return new TimeSlot()
+            {
+                Date = time,
+                Free = [1],
+                AdministratorId = adminId
+            };
+        }
+        public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+        {
+            for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+                yield return day;
+        }
+        public IEnumerable<DateTime> Each15Min(DateTime date)
+        {          
+            var from = new DateTime(date.Year, date.Month, date.Day, 9, 0, 0);
+            var thru = new DateTime(date.Year, date.Month, date.Day, 18, 0, 0);
+
+            for (var day = from; day < thru; day = day.AddMinutes(15))
+                yield return day;
         }
     }
 }

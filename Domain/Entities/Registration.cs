@@ -30,7 +30,7 @@ public partial class Registration:BaseEntity
     public  User Administrator { get; set; } = null!;
 
     [ForeignKey("RequestId")]
-    [InverseProperty("Registrations")]
+    [InverseProperty("Registration")]
     public  Request Request { get; set; } = null!;
 
     [ForeignKey("RoomId")]

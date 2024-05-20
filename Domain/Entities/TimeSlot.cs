@@ -13,11 +13,8 @@ namespace Domain.Entities
     [Table("time_slots")]
     public partial class TimeSlot:BaseEntity
     {
-        [Column("date", TypeName = "date")]
-        public DateTime Day { get; set; }
-
-        [Column("time", TypeName = "time(7)")]
-        public TimeOnly Time { get; set; }
+        [Column("date", TypeName = "dateTime")]
+        public DateTime Date { get; set; }
 
         [Column("free")]
         [MaxLength(1)]
@@ -27,23 +24,13 @@ namespace Domain.Entities
         [Column("administrator_id")]
         public long? AdministratorId { get; set; }
 
-        [Required]
-        [Column("request_id")]
-        public long? RequestId { get; set; }
-
         [ForeignKey("AdministratorId")]
         [InverseProperty("TimeSlots")]
         public User? Administrator { get; set; } = null!;
-        
-        //множственная связь
-        //[JsonIgnore]
-        //[InverseProperty("TimeSlot")]
-        //public ICollection<Request>? Requests { get; set; } = new List<Request>();
 
-    
+        [JsonIgnore]
         [InverseProperty("TimeSlot")]
-        public Request? Request { get; set; }
-
+        public Request? Request { get; set; } = null!;
 
     }
 }

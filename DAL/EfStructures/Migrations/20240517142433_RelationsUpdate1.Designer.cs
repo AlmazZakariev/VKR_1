@@ -4,6 +4,7 @@ using DAL.EfStructures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.EfStructures.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240517142433_RelationsUpdate1")]
+    partial class RelationsUpdate1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,8 +135,7 @@ namespace DAL.EfStructures.Migrations
                     b.HasIndex("TimeSlotId")
                         .IsUnique();
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("requests");
                 });
@@ -252,8 +254,8 @@ namespace DAL.EfStructures.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("administrator_id");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("dateTime")
+                    b.Property<DateTime>("Day")
+                        .HasColumnType("date")
                         .HasColumnName("date");
 
                     b.Property<byte[]>("Free")
@@ -262,6 +264,10 @@ namespace DAL.EfStructures.Migrations
                         .HasColumnType("binary(1)")
                         .HasColumnName("free")
                         .IsFixedLength();
+
+                    b.Property<TimeOnly>("Time")
+                        .HasColumnType("time(7)")
+                        .HasColumnName("time");
 
                     b.Property<byte[]>("TimeStamp")
                         .IsConcurrencyToken()
@@ -297,10 +303,6 @@ namespace DAL.EfStructures.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("email");
-
-                    b.Property<short?>("Gender")
-                        .HasColumnType("smallint")
-                        .HasColumnName("gender");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -386,8 +388,8 @@ namespace DAL.EfStructures.Migrations
                         .HasConstraintName("FK_requests_time_slots");
 
                     b.HasOne("Domain.Entities.User", "User")
-                        .WithOne("Request")
-                        .HasForeignKey("Domain.Entities.Request", "UserId")
+                        .WithMany("Requests")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("FK_requests_users");
@@ -428,8 +430,7 @@ namespace DAL.EfStructures.Migrations
                 {
                     b.Navigation("Registrations");
 
-                    b.Navigation("Request")
-                        .IsRequired();
+                    b.Navigation("Requests");
 
                     b.Navigation("TimeSlots");
                 });

@@ -11,8 +11,6 @@ namespace DAL.EfStructures;
 
 public partial class ApplicationDBContext : DbContext
 {
-
-
     public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
         : base(options)
     {
@@ -64,7 +62,7 @@ public partial class ApplicationDBContext : DbContext
         }
     }
 
-    public DbSet<Registration>? Registrations { get; set; }
+    public DbSet<Registration>? Registrations { get; set; } 
 
     public DbSet<Request>? Requests { get; set; }
 
@@ -88,7 +86,7 @@ public partial class ApplicationDBContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_registrations_users");
 
-            entity.HasOne(d => d.Request).WithMany(p => p.Registrations)
+            entity.HasOne(d => d.Request).WithOne(p => p.Registration)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_registrations_requests");
 
@@ -99,7 +97,7 @@ public partial class ApplicationDBContext : DbContext
 
         modelBuilder.Entity<Request>(entity =>
         {
-            entity.HasOne(d => d.User).WithMany(p => p.Requests)
+            entity.HasOne(d => d.User).WithOne(p => p.Request)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_requests_users");
 
