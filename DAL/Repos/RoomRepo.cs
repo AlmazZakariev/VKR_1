@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repos
 {
-    internal class RoomRepo : BaseRepo<Room>, IRoomRepo
+    public class RoomRepo : BaseRepo<Room>, IRoomRepo
     {
         public RoomRepo(ApplicationDBContext context) : base(context)
         {

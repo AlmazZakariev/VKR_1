@@ -10,26 +10,27 @@ using System.Diagnostics;
 using VKR_1.Models;
 using VKR_1.Models.Account;
 using VKR_1.Models.Home;
+using VKR_1.Views.Home;
 
 namespace VKR_1.Controllers
 {
     [Authorize]
     public class HomeController : BaseController
     {
-
-
-        private readonly ApplicationDBContext _context;
         private readonly UserRepo _userRepo;
+        private readonly RequestRepo _requestRepo;
+        private readonly GeneralRepo _generalRepo;
         public HomeController(ApplicationDBContext context)
         {
-            _context = context;
             _userRepo = new UserRepo(context);
+            _requestRepo = new RequestRepo(context);
+            _generalRepo= new GeneralRepo(context);
         }
 
         public async Task<IActionResult> IndexAsync()
 
         {
-            Request? request = await GetRequestCurrentUserAsync();
+            Request? request = await _requestRepo.FindByUserAsync(CurrentUserId);
             User? currentUser = await _userRepo.FindAsync(CurrentUserId);
             if (currentUser == null)
             {
@@ -62,37 +63,50 @@ namespace VKR_1.Controllers
                     });
                 }
             }
-            
-
         }
-
 
         public async Task<IActionResult> CreateAsync(HomeViewModel model)
         {
+            var general = await _generalRepo.FindSingleAsync();
+
+            if (general != null)
+            {
+
+                //if  (!(model.PreferenceDate.Date >= general.StartDate.Date && model.PreferenceDate.Date <= general.EndDate.Date))
+                //{
+                //    //пустая дата
+                //    //model.PreferenceDate = null;
+                //} 
+            }
+            else
+            {
+                return View("_ShowRequest", new HomeViewModel()
+                {
+
+                });
+            }
             if (!ModelState.IsValid)
             {
-                model.Request = await GetRequestCurrentUserAsync();
+                model.Request = await _requestRepo.FindByUserAsync(CurrentUserId);
                 return View("Index", model);
             }
 
-            await _context.Requests.AddAsync(new Request
+            await _requestRepo.AddAsync(new Request
             {
                 Date = DateTime.Now,
                 PreferenceDate = model.PreferenceDate,
                 UserId = CurrentUserId
-            });
-
-            await _context.SaveChangesAsync();
+            });         
             return RedirectToAction("Index");
         }
 
-        private async Task<Request?> GetRequestCurrentUserAsync()
-        {
-            return await _context.Requests
-                .Include(r => r.User)
-                .FirstOrDefaultAsync(x => x.UserId == CurrentUserId);
+        //private async Task<Request?> GetRequestCurrentUserAsync()
+        //{
+        //    return await _context.Requests
+        //        .Include(r => r.User)
+        //        .FirstOrDefaultAsync(x => x.UserId == CurrentUserId);
 
-        }
+        //}
 
         //private string RedirectToHomeString(User user)
         //{

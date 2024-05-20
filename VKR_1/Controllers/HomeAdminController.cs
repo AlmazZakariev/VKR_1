@@ -100,7 +100,7 @@ namespace VKR_1.Controllers
         private async ValueTask<int> CreateTimeSlots()
         {
             var admins = await _userRepo.FindAllAdminsAsync();
-            var general = await _generalRepo.FindSingle();
+            var general = await _generalRepo.FindSingleAsync();
             List<TimeSlot> timeSlots = new List<TimeSlot>();
 
             foreach (var admin in admins)

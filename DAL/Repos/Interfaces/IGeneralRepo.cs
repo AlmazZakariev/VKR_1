@@ -10,6 +10,6 @@ namespace DAL.Repos.Interfaces
 {
     public interface IGeneralRepo : IRepo<General>
     {
-        ValueTask<General?> FindSingle();
+        ValueTask<General?> FindSingleAsync();
     }
 }

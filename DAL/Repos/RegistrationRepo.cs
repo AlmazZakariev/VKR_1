@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repos
 {
-    internal class RegistrationRepo : BaseRepo<Registration>, IRegistrationRepo
+    public class RegistrationRepo : BaseRepo<Registration>, IRegistrationRepo
     {
         public RegistrationRepo(ApplicationDBContext context):base(context)
         {

@@ -7,7 +7,7 @@ using System.Transactions;
 
 namespace DAL.Repos
 {
-    internal class RequestRepo : BaseRepo<Request>, IRequestRepo
+    public class RequestRepo : BaseRepo<Request>, IRequestRepo
     {
         public RequestRepo(ApplicationDBContext context) : base(context)
         {
@@ -22,32 +22,44 @@ namespace DAL.Repos
         //{
         //    return Context.Requests.FirstOrDefaultAsync(x => x.UserId == user.Id);
         //}
-        public async ValueTask<int> AddAsync(Request entity, DateTime? date=null, bool persist = true)
+        public override async ValueTask<int> AddAsync(Request entity, bool persist = true)
         {
-            
-            using(TransactionScope scope = new TransactionScope())
+            ValueTask<int> task1 = new ValueTask<int>();
+            ValueTask<int> task2 = new ValueTask<int>();
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var _timeSlotRepo = new TimeSlotRepo(Context);
                 TimeSlot timeSlot;
-                if (date== null)
+                if (entity.PreferenceDate == null)
                 {
                     timeSlot = await _timeSlotRepo.FindFree();
                 }
                 else
                 {
-                    timeSlot = await _timeSlotRepo.FindFreeByDay((DateTime)date);
+                    timeSlot = await _timeSlotRepo.FindFreeByDay((DateTime)entity.PreferenceDate);
                 }
                 if ( timeSlot!= null)
                 {
                     entity.TimeSlotId = timeSlot.Id;
+                    timeSlot.Free = [0];
+
+                    await _timeSlotRepo.UpdateAsync(timeSlot);
+                    //task1 = persist ? await Context.SaveChangesAsync() : 0;
+                    var a = await SaveChangesAsync();
+                    
                     await Context.Requests.AddAsync(entity);
-
-                    return persist ? await SaveChangesAsync() : 0;
+                    //task2 = persist ? SaveChangesAsync() : new ValueTask<int>(0);
+                    await SaveChangesAsync();
                 }
-
                 scope.Complete();
             }
-            return 0;
+            return task1.Result+task2.Result;
+        }
+        public async ValueTask<Request?> FindByUserAsync(long userId)
+        {
+            return await Context.Requests
+               .Include(r => r.User)
+               .FirstOrDefaultAsync(x => x.UserId == userId);
         }
     }
 }

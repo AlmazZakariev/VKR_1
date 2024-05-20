@@ -15,13 +15,22 @@ namespace DAL.Tests
 
             var connection = new Connection();
 
+            var tsRepo = new TimeSlotRepo(connection.Context);
+
+            var ts = tsRepo.GetAll();
+            DateTime day = DateTime.Now.AddDays(2);
+            
+
+            var ts2 = tsRepo.FindFreeByDay(day).Result;
+            var ts3 = connection.Context.TimeSlots.Where(x => x.Date == day.Date).FirstOrDefault();
+            Console.WriteLine();
             //UserRepo userRepo = new UserRepo(connection.Context);
 
             //var user =  userRepo.Find(3).Result;
             //Console.WriteLine(user);
 
             //SampleDataInitializer.ClearData(connection.Context);
-            SampleDataInitializer.InitializeData(connection.Context);
+            //SampleDataInitializer.InitializeData(connection.Context);
 
             //CreateUsers(connection.Context);
 

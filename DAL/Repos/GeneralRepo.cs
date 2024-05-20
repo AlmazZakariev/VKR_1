@@ -17,7 +17,7 @@ namespace DAL.Repos
 
         }
 
-        public async ValueTask<General?> FindSingle()
+        public async ValueTask<General?> FindSingleAsync()
         {
             return await Context.General.OrderByDescending(g => g.Id).FirstOrDefaultAsync();
         }

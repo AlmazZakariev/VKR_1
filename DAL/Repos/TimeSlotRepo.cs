@@ -29,11 +29,11 @@ namespace DAL.Repos
         }
         public async ValueTask<TimeSlot?> FindFreeByDay(DateTime day)
         {
-            return await Context.TimeSlots.FirstOrDefaultAsync(t => t.Free == new byte[] {0}&&t.Date.Date==day.Date);
+            return await Context.TimeSlots.FirstOrDefaultAsync(t => t.Free == new byte[] {1}&&t.Date.Date==day.Date);
         }
         public async ValueTask<TimeSlot?> FindFree()
         {
-            return await Context.TimeSlots.FirstOrDefaultAsync(t => t.Free == new byte[] { 0 });
+            return await Context.TimeSlots.FirstOrDefaultAsync(t => t.Free == new byte[] {1});
         }
     }
 }
