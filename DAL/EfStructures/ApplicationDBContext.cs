@@ -90,9 +90,9 @@ public partial class ApplicationDBContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_registrations_requests");
 
-            entity.HasOne(d => d.Room).WithMany(p => p.Registrations)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_registrations_rooms");
+            //entity.HasOne(d => d.Room).WithMany(p => p.Registrations)
+            //    .OnDelete(DeleteBehavior.Restrict)
+            //    .HasConstraintName("FK_registrations_rooms");
         });
 
         modelBuilder.Entity<Request>(entity =>

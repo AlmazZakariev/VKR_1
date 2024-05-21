@@ -42,7 +42,7 @@ public partial class User : BaseEntity
     public string Phone { get; set; } = null!;
 
     [Column("gender")]
-    public short? Gender { get; set; }
+    public short Gender { get; set; }
 
     [Column("admin")]
     [MaxLength(1)]

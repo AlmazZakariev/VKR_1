@@ -22,11 +22,11 @@ namespace Domain.Entities
 
         [Required]
         [Column("administrator_id")]
-        public long? AdministratorId { get; set; }
+        public long AdministratorId { get; set; }
 
         [ForeignKey("AdministratorId")]
         [InverseProperty("TimeSlots")]
-        public User? Administrator { get; set; } = null!;
+        public User Administrator { get; set; } = null!;
 
         [JsonIgnore]
         [InverseProperty("TimeSlot")]

@@ -4,19 +4,32 @@
 @{
     ViewData["Title"] = "Application Form";
 }
+
  <form asp-action="Create">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <h2>Подача заявки</h2>
-                <form asp-action="SubmitApplication" method="post">
-                    <div class="form-group">
-                        <label asp-for="PreferenceDate">Желаемая дата</label>
-                        <input asp-for="PreferenceDate" class="form-control" type="date" />
-                        <span asp-validation-for="PreferenceDate" class="text-danger"></span>
-                    </div>
-                    <button type="submit" class="btn btn-success">Подтвердить</button>
-                </form>
+    <div class="row mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <h2>Подача заявки</h2>
+                    <form asp-action="SubmitApplication" method="post">
+                        @* <div class="form-group">
+                            <label asp-for="PreferenceDate">Желаемая дата</label>
+                            <input asp-for="PreferenceDate" class="form-control" type="date" />
+                            <span asp-validation-for="PreferenceDate" class="text-danger"></span>
+                        </div> *@
+                        <div class="col-12 mb-2">
+                            <div class="form-floating">
+                                <input asp-for="PreferenceDate"
+                                       type="date"
+                                       class="form-control shadow-sm rounded"
+                                       placeholder="Username">
+                                <label asp-for="PreferenceDate">Желаемая дата</label>
+                            </div>
+                            <span asp-validation-for="PreferenceDate" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-success">Подтвердить</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

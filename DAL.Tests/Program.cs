@@ -158,20 +158,20 @@ namespace DAL.Tests
                 TestDB.CreateRequest(request, context);
             }
         }
-        private static void CreateRegistration(ApplicationDBContext context)
-        {
-            List<Registration> registrations = new()
-            {
-                new (){RequestId = 1, AdministratorId = 5, RoomId = 3, Date = DateTime.Now},
+        //private static void CreateRegistration(ApplicationDBContext context)
+        //{
+        //    List<Registration> registrations = new()
+        //    {
+        //        new (){RequestId = 1, AdministratorId = 5, RoomId = 3, Date = DateTime.Now},
 
-                new(){RequestId = 2, AdministratorId = 5}
-            };
+        //        new(){RequestId = 2, AdministratorId = 5}
+        //    };
 
-            foreach (var registration in registrations)
-            {
-                TestDB.CreateRegistration(registration, context);
-            }
-        }
+        //    foreach (var registration in registrations)
+        //    {
+        //        TestDB.CreateRegistration(registration, context);
+        //    }
+        //}
     }
 
     

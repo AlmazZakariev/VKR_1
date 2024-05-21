@@ -18,10 +18,16 @@ public partial class Registration:BaseEntity
     [Column("administrator_id")]
     public long AdministratorId { get; set; }
 
-    [Required]
-    [Column("room_id")]
-    public long RoomId { get; set; }
 
+    [StringLength(255)]
+    [Unicode(false)]
+    [Column("room")]
+    public string Room { get; set; } = null!;
+
+    //[Required]
+    //[Column("room_id")]
+    //public long RoomId { get; set; }
+    [Required]
     [Column("date", TypeName = "datetime")]
     public DateTime Date { get; set; }
 
@@ -33,9 +39,9 @@ public partial class Registration:BaseEntity
     [InverseProperty("Registration")]
     public  Request Request { get; set; } = null!;
 
-    [ForeignKey("RoomId")]
-    [InverseProperty("Registrations")]
-    public  Room Room { get; set; } = null!;
+    //[ForeignKey("RoomId")]
+    //[InverseProperty("Registrations")]
+    //public  Room Room { get; set; } = null!;
 
     public override string ToString()
     {

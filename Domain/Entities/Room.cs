@@ -27,9 +27,9 @@ public partial class Room:BaseEntity
     [Column("free_slots")]
     public short FreeSlots { get; set; }
 
-    [JsonIgnore]
-    [InverseProperty("Room")]
-    public  ICollection<Registration> Registrations { get; set; } = new List<Registration>();
+    //[JsonIgnore]
+    //[InverseProperty("Room")]
+    //public  ICollection<Registration> Registrations { get; set; } = new List<Registration>();
 
     public override string ToString()
     {

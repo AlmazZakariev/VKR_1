@@ -28,7 +28,6 @@ namespace VKR_1.Controllers
         }
 
         public async Task<IActionResult> IndexAsync()
-
         {
             Request? request = await _requestRepo.FindByUserAsync(CurrentUserId);
             User? currentUser = await _userRepo.FindAsync(CurrentUserId);

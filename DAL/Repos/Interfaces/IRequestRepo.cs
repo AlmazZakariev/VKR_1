@@ -7,5 +7,7 @@ namespace DAL.Repos.Interfaces
     {
         //public Request GetRequestByUser(User user);
         ValueTask<Request?> FindByUserAsync(long userId);
+
+        Task<IEnumerable<Request>> GetRequestsWithoutRegistrationByAdminAsync(long adminId);
     }
 }

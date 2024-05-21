@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VKR_1.Models.Account;
 using VKR_1.Models.HomeAdmin;
+using VKR_1.Models.Registration;
 
 namespace VKR_1.Controllers
 {
@@ -16,12 +17,16 @@ namespace VKR_1.Controllers
         private readonly UserRepo _userRepo;
         private readonly GeneralRepo _generalRepo;
         private readonly TimeSlotRepo _timeSlotRepo;
+        private readonly RegistrationRepo _registerRepo;
+        private readonly RequestRepo _requsetRepo;
         public HomeAdminController(ApplicationDBContext context)
         {
             _context = context;
             _userRepo = new UserRepo(context);
             _generalRepo = new GeneralRepo(context);
             _timeSlotRepo = new TimeSlotRepo(context);
+            _registerRepo = new RegistrationRepo(context);
+            _requsetRepo = new RequestRepo(context);
         }
 
         public async Task<IActionResult> IndexAsync()
@@ -53,7 +58,7 @@ namespace VKR_1.Controllers
 
             return View("Index", new HomeViewModelAdmin
             {
-                Requests = await GetRequestsAsync(),
+                Requests = await _requsetRepo.GetRequestsWithoutRegistrationByAdminAsync(CurrentUserId),
                 Admins = await GetAdminsAsync(),
                 StartDate = start,
                 EndDate = end,
@@ -78,13 +83,28 @@ namespace VKR_1.Controllers
 
             return RedirectToAction("Index");
         }
-
-        private async Task<IEnumerable<Request>> GetRequestsAsync()
+        public async Task<IActionResult> RegisterAsync(HomeViewModelAdmin model, long requestId)
         {
-            return await _context.Requests
-                .Include(r => r.User)
-                .ToListAsync();
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Index");
+            }
+            var request =  await _requsetRepo.FindAsync(requestId);
+            await _registerRepo.AddAsync(new Registration
+            {
+                RequestId = requestId,
+                AdministratorId = request.TimeSlot.AdministratorId,
+                Date = DateTime.Now,
+                Room = model.Room
+            });
+            return RedirectToAction("Index");
         }
+        //private async Task<IEnumerable<Request>> GetRequestsAsync()
+        //{
+        //    return await _context.Requests
+        //        .Include(r => r.User)
+        //        .ToListAsync();
+        //}
         private async Task<IEnumerable<User>> GetAdminsAsync()
         {
             return await _context.Users
