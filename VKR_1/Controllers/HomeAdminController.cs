@@ -45,7 +45,7 @@ namespace VKR_1.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var general = GetGeneralAsync().Result;
+            var general = await _generalRepo.FindSingleAsync();
             DateTime start = DateTime.Now;
             DateTime end = DateTime.Now;
             bool set = false;
@@ -112,10 +112,7 @@ namespace VKR_1.Controllers
                 .ToListAsync();
         }
 
-        private async Task<General?> GetGeneralAsync()
-        {
-            return await _context.General.FirstOrDefaultAsync(g => g.Id > 1);
-        }
+        
 
         private async ValueTask<int> CreateTimeSlots()
         {

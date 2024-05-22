@@ -39,8 +39,8 @@ namespace VKR_1.Models.Account
 
         [Required(ErrorMessage = "Данное поле обязательно")]
         public string Name { get; set; }
-       
-        public string Patronymic { get; set; }
+
+        public string? Patronymic { get; set; } = null!;
 
         [Required(ErrorMessage = "Данное поле обязательно")]
         [Phone]

@@ -20,15 +20,16 @@
                 <h2>Список заявок</h2>
                 <div class="card">
                     <div class="card-body">
+                       
                         @foreach (var request in Model.Requests)
                         {
                             @* <div class="request-item"> *@
 
-                                
-                            @* <vc:request-item></vc:request-item> *@
+                            <vc:request-item registration="@new(){CurrentRequest = request}" />
 
 
-                            <form asp-action="Register"  method="post">
+
+                            @* <form asp-action="Register"  method="post">
                                 <input type="hidden" name="requestId" value="@request.Id" />
                                 <div class="task shadow-sm p-3 mb-5 bg-body-tertiary rounded">
                                     <div class="d-flex justify-content-start align-items-center">
@@ -51,7 +52,7 @@
                                         <button type="submit" class="btn btn-primary">Зарегистрировать</button>
                                     </div>
                                 </div>
-                            </form>
+                            </form> *@
                         }
                     </div>
                 </div>

@@ -1,0 +1,7 @@
+﻿@using VKR_1.Models.Registration
+@model RegistrationViewModel
+
+
+    <label>Введите номер комнаты</label>
+    <input asp-for="Room" class="form-control" type="text" />
+    <span asp-validation-for="Room" class="text-danger"></span>

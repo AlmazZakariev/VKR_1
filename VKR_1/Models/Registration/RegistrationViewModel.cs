@@ -6,9 +6,13 @@ namespace VKR_1.Models.Registration
 {
     public class RegistrationViewModel
     {
-        public Request? CurrentRequest { get; set; }
+        //public RegistrationViewModel(Request request)
+        //{
+        //    CurrentRequest = request;
+        //}
+        public Request CurrentRequest { get; set; }
 
         [Required(ErrorMessage = "Данное поле обязательно")]
-        public string Room { get; set; }
+        public string Room { get; set; } = null!;
     }
 }

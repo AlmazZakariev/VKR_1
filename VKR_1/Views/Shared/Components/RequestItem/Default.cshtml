@@ -1,30 +1,31 @@
-﻿@using Domain.Entities;
-@model IEnumerable<Request>
-@{
-}
+﻿@using Domain.Entities
+@using VKR_1.Models.Registration
+@model RegistrationViewModel
 
 
+@* <form asp-controller="HomeAdmin" asp-action="Register" method="post"> *@
 
-<div class="task shadow-sm p-3 mb-5 bg-body-tertiary rounded d-flex justify-content-between align-items-center">
-    <div class="form-check d-flex align-items-center">
-        @foreach (var request in Model)
-        {
-            <div class="task shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                <div class="d-flex justify-content-start align-items-center">
-                    <h5 class="me-2">@request.User?.Surname</h5>
-                    <h5 class="me-2">@request.User?.Name</h5>
-                    <h5>@request.User?.Patronymic</h5>
-                    <p class="ms-auto">@request.PreferenceDate?.ToString("dd.MM.yyyy")</p>
-                </div>
-                <div class="d-flex justify-content-start align-items-center">
-                    <p class="me-5">@request.User?.Email</p>
-                    <p>@request.User?.Phone</p>
-                </div>
-                <div class="d-flex justify-content-start">
-                    <button type="submit" class="btn btn-primary">Зарегистрировать</button>
-                </div>
-            </div>
-        }
+<form asp-controller="HomeAdmin" class="request " data-id="@Model.CurrentRequest?.Id">
+    <input type="hidden" name="requestId" value="@Model.CurrentRequest?.Id" />
+    <div class="shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+        <div class="d-flex justify-content-start align-items-center">
+            <h5 class="me-2">@Model.CurrentRequest?.User.Surname</h5>
+            <h5 class="me-2">@Model.CurrentRequest?.User.Name</h5>
+            <h5>@Model.CurrentRequest?.User.Patronymic</h5>
+            <p class="ms-auto">@Model.CurrentRequest?.PreferenceDate?.ToString("dd.MM.yyyy")</p>
+        </div>
+        <div class="d-flex justify-content-start align-items-center">
+            <p class="me-5">@Model.CurrentRequest?.User.Email</p>
+            <p>@Model.CurrentRequest?.User.Phone</p>
+        </div>
 
+        <div class="form-group mb-3 d-none" for="test-@Model.CurrentRequest?.Id">
+            <label>Введите номер комнаты</label>
+            <input asp-for="Room" class="form-control" type="text" />
+            <span asp-validation-for="Room" class="text-danger"></span>
+        </div>
+        <div class="d-flex justify-content-start">
+            <button type="button" class="btn btn-primary reg">Зарегистрировать</button>
+        </div>
     </div>
-</div>
+</form>
