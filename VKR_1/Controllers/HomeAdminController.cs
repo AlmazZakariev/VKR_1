@@ -83,17 +83,18 @@ namespace VKR_1.Controllers
 
             return RedirectToAction("Index");
         }
-        public async Task<IActionResult> RegisterAsync(HomeViewModelAdmin model, long requestId)
+        public async Task<IActionResult> RegisterAsync(RegistrationViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState["Room"].ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid)
+            //if (!ModelState.IsValid)
             {
                 return RedirectToAction("Index");
             }
-            var request =  await _requsetRepo.FindAsync(requestId);
+            //var request = Req
             await _registerRepo.AddAsync(new Registration
             {
-                RequestId = requestId,
-                AdministratorId = request.TimeSlot.AdministratorId,
+                RequestId = model.CurrentRequest.Id,
+                AdministratorId = CurrentUserId,
                 Date = DateTime.Now,
                 Room = model.Room
             });

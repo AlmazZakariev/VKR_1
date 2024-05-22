@@ -5,7 +5,7 @@
 
 @* <form asp-controller="HomeAdmin" asp-action="Register" method="post"> *@
 
-<form asp-controller="HomeAdmin" class="request " data-id="@Model.CurrentRequest?.Id">
+<div class="request" data-id="@Model.CurrentRequest?.Id">
     <input type="hidden" name="requestId" value="@Model.CurrentRequest?.Id" />
     <div class="shadow-sm p-3 mb-5 bg-body-tertiary rounded">
         <div class="d-flex justify-content-start align-items-center">
@@ -20,12 +20,25 @@
         </div>
 
         <div class="form-group mb-3 d-none" for="test-@Model.CurrentRequest?.Id">
-            <label>Введите номер комнаты</label>
-            <input asp-for="Room" class="form-control" type="text" />
-            <span asp-validation-for="Room" class="text-danger"></span>
+            <form asp-controller="HomeAdmin" asp-action="Register">
+                <input type="hidden" asp-for="CurrentRequest.Id" />
+                <label>Введите номер комнаты</label>
+                <input asp-for="Room" class="form-control mb-3" type="text" />
+                <span asp-validation-for="Room" class="text-danger"></span>
+
+                <div class="d-flex justify-content-start align-items-center">
+                    <button type="button" class="btn btn-danger me-3 cancel">Отменить</button>
+                    <button type="submit" class="btn btn-success">Подтвердить</button>
+                </div>
+
+
+            </form>
         </div>
+
         <div class="d-flex justify-content-start">
+            @* @Html.HiddenFor(m=>m.GetType()) *@
             <button type="button" class="btn btn-primary reg">Зарегистрировать</button>
         </div>
+
     </div>
-</form>
+</div>

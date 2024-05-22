@@ -10,9 +10,10 @@ namespace VKR_1.Models.Registration
         //{
         //    CurrentRequest = request;
         //}
-        public Request CurrentRequest { get; set; }
+        public Request? CurrentRequest { get; set; } = null!;
 
         [Required(ErrorMessage = "Данное поле обязательно")]
-        public string Room { get; set; } = null!;
+        public string Room { get; set; }
     }
+
 }
