@@ -7,7 +7,7 @@ namespace VKR_1.Models.HomeAdmin
     {
         public IEnumerable<Request>? Requests { get; set; }
 
-        public IEnumerable<User>? Admins { get; set; }
+        public IEnumerable<User?> Admins { get; set; }
         [Required(ErrorMessage = "Данное поле обязательно")]
         [Display(Name = "Старт")]
         [DataType(DataType.Date)]

@@ -1,24 +1,21 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using VKR_1.Models.Account;
 using DAL.EfStructures;
-using Microsoft.EntityFrameworkCore;
 using DAL.Controllers;
 using DAL.Repos;
+using DAL.Repos.Interfaces;
 
 namespace VKR_1.Controllers
 {
     public class AccountController : BaseController
     {
-        //private readonly ApplicationDBContext _context;
-        private readonly UserRepo _userRepo;
+        private readonly IUserRepo _userRepo;
         public AccountController(ApplicationDBContext context)
         {
-            //_context = context;
             _userRepo = new UserRepo(context);
         }
 
@@ -98,9 +95,6 @@ namespace VKR_1.Controllers
 
             user = new User{Name = model.Name, Surname = model.Surname, Patronymic = model.Patronymic, Email = model.Email, Phone = model.Phone, Pass = SecretHasher.Hash(model.Password), Admin = [0], Gender = model.Gender };
             await _userRepo.AddAsync(user);
-            //await _context.Users.AddAsync(user);
-            //await _context.SaveChangesAsync();
-
             await AuthenticateAsync(user);
             return RedirectToAction("Index", "Home");
         }
@@ -110,7 +104,5 @@ namespace VKR_1.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
-
-        
     }
 }

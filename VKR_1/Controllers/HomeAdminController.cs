@@ -1,5 +1,6 @@
 ﻿using DAL.EfStructures;
 using DAL.Repos;
+using DAL.Repos.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,15 +14,13 @@ namespace VKR_1.Controllers
     [Authorize]
     public class HomeAdminController : BaseController
     {
-        private readonly ApplicationDBContext _context;
-        private readonly UserRepo _userRepo;
-        private readonly GeneralRepo _generalRepo;
-        private readonly TimeSlotRepo _timeSlotRepo;
-        private readonly RegistrationRepo _registerRepo;
-        private readonly RequestRepo _requsetRepo;
+        private readonly IUserRepo _userRepo;
+        private readonly IGeneralRepo _generalRepo;
+        private readonly ITimeSlotRepo _timeSlotRepo;
+        private readonly IRegistrationRepo _registerRepo;
+        private readonly IRequestRepo _requsetRepo;
         public HomeAdminController(ApplicationDBContext context)
-        {
-            _context = context;
+        { 
             _userRepo = new UserRepo(context);
             _generalRepo = new GeneralRepo(context);
             _timeSlotRepo = new TimeSlotRepo(context);
@@ -59,12 +58,11 @@ namespace VKR_1.Controllers
             return View("Index", new HomeViewModelAdmin
             {
                 Requests = await _requsetRepo.GetRequestsWithoutRegistrationByAdminAsync(CurrentUserId),
-                Admins = await GetAdminsAsync(),
+                Admins = await _userRepo.FindAllAdminsAsync(),
                 StartDate = start,
                 EndDate = end,
                 DatesSet = set
             });
-
 
         }
 
@@ -86,11 +84,10 @@ namespace VKR_1.Controllers
         public async Task<IActionResult> RegisterAsync(RegistrationViewModel model)
         {
             if (ModelState["Room"].ValidationState == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid)
-            //if (!ModelState.IsValid)
             {
                 return RedirectToAction("Index");
             }
-            //var request = Req
+            
             await _registerRepo.AddAsync(new Registration
             {
                 RequestId = model.CurrentRequest.Id,
@@ -100,20 +97,6 @@ namespace VKR_1.Controllers
             });
             return RedirectToAction("Index");
         }
-        //private async Task<IEnumerable<Request>> GetRequestsAsync()
-        //{
-        //    return await _context.Requests
-        //        .Include(r => r.User)
-        //        .ToListAsync();
-        //}
-        private async Task<IEnumerable<User>> GetAdminsAsync()
-        {
-            return await _context.Users
-                .Where(x => x.Admin[0] == 1)
-                .ToListAsync();
-        }
-
-        
 
         private async ValueTask<int> CreateTimeSlots()
         {
