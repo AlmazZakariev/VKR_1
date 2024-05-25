@@ -1,0 +1,107 @@
+﻿@using VKR_1.Models.Registration;
+@model RegistrationViewModel
+
+
+
+@{
+    ViewData["Title"] = "Регистрация";
+}
+<form asp-controller="Registration" asp-action="Register">
+    <div class="container d-flex justify-content-md-center align-items-center">
+        <div class="Registration col-md-8" data-id="@Model.CurrentRequest?.Id">
+            <input type="hidden" name="requestId" value="@Model.CurrentRequest?.Id" />
+            <div class="shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                <div class="d-flex justify-content-start align-items-center">
+                    <h5 class="me-2">@Model.CurrentRequest?.User.Surname</h5>
+                    <h5 class="me-2">@Model.CurrentRequest?.User.Name</h5>
+                    <h5>@Model.CurrentRequest?.User.Patronymic</h5>
+                    <p class="ms-auto">@Model.CurrentRequest?.PreferenceDate?.ToString("dd.MM.yyyy")</p>
+                </div>
+                <div class="d-flex justify-content-start align-items-center">
+                    <p class="me-5">@Model.CurrentRequest?.User.Email</p>
+                    <p>@Model.CurrentRequest?.User.Phone</p>
+                </div>
+                <div class="form-group mb-3">
+                    <label>Этаж:</label>
+                    <select asp-for="SelectedFloor" class="form-control" id="lstFloor">
+                        <option value="" selected disabled hidden>Выберите этаж</option>
+                        @foreach (var floor in Model.Floors)
+                        {
+                            <option value="@floor">@floor</option>
+                        }
+                    </select>
+
+                    <label>Номер комнаты:</label>
+                    <select asp-for="SelectedRoomNumber" class="form-control" id="lstRoomNumber">
+                        <option value="0">Выберите номер комнаты</option>
+                    </select>
+
+                    <label>Комната:</label>
+                    <select asp-for="SelectedRoom" class="form-control" id="lstRoom">
+                        <option value="0">Выберите комнату</option>
+                    </select>
+                </div>
+
+
+                <div class="d-flex justify-content-start">
+                    <input type="hidden" asp-for="CurrentRequest.Id" />
+                    <button type="submit" class="btn btn-primary reg">Зарегистрировать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            $('#lstFloor').change(function () {
+                var selectedFloor = $(this).val();
+                var currentRequestId = '@Model.CurrentRequest.Id';
+                $.ajax({
+                    url: '@Url.Action("GetRoomNumbers", "Registration")',
+                    type: 'GET',
+                    data: { floor: selectedFloor, requestId: currentRequestId },
+                    success: function (data) {
+                        $('#lstRoomNumber').empty();
+                        $('#lstRoom').empty();
+                        $('#lstRoomNumber').append('<option value="" selected disabled hidden>Выберите номер комнаты</option>');
+                        $('#lstRoom').append('<option value="" selected disabled hidden>Выберите комнату</option>');
+                        $.each(data, function (index, value) {
+                            $('#lstRoomNumber').append('<option value="' + value + '">' + value + '</option>');
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#lstRoomNumber').change(function () {
+                var selectedRoomNumber = $(this).val();
+                var currentRequestId = '@Model.CurrentRequest.Id';
+                var selectedFloor = $('#lstFloor').val();
+
+                $.ajax({
+                    url: '@Url.Action("GetRooms", "Registration")',
+                    type: 'GET',
+                    data: { floor: selectedFloor, roomNumber: selectedRoomNumber, requestId: currentRequestId },
+                    success: function (data) {
+                        $('#lstRoom').empty();
+                        $('#lstRoom').append('<option value="" selected disabled hidden>Выберите комнату</option>');
+                        $.each(data, function (index, value) {
+                            var roomText = `${value.floor}${value.number}-${value.addNumber} (${value.freeSlots} свободных мест)`;
+                            $('#lstRoom').append(`<option value="${value.id}">${roomText}</option>`);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+}

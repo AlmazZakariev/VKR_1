@@ -16,12 +16,13 @@ namespace DAL.Initialization
         {
             var entities = new[]
             {
+                typeof(User).FullName,
                 typeof(Room).FullName,
                 typeof(Registration).FullName,
                 typeof(Request).FullName,
                 typeof(TimeSlot).FullName,
                 typeof(General).FullName,
-                typeof(User).FullName,
+                
             };
             foreach (var entityName in entities)
             {

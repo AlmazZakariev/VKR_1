@@ -27,9 +27,17 @@ public partial class Room:BaseEntity
     [Column("free_slots")]
     public short FreeSlots { get; set; }
 
-    //[JsonIgnore]
-    //[InverseProperty("Room")]
-    //public  ICollection<Registration> Registrations { get; set; } = new List<Registration>();
+    [Required]
+    [Column("administrator_id")]
+    public long AdministratorId { get; set; }
+
+    [ForeignKey("AdministratorId")]
+    [InverseProperty("Rooms")]
+    public User Administrator { get; set; } = null!;
+
+    [JsonIgnore]
+    [InverseProperty("Room")]
+    public ICollection<Registration> Registrations { get; set; } = new List<Registration>();
 
     public override string ToString()
     {

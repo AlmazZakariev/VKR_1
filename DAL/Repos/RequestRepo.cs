@@ -66,11 +66,13 @@ namespace DAL.Repos
         {
             return await Context.Requests
                 .Include(r => r.TimeSlot)
+                .Include(r => r.User)
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
         public async Task<IEnumerable<Request>> GetRequestsWithoutRegistrationByAdminAsync(long adminId)
         {
             return await Context.Requests
+                .Include(r => r.TimeSlot)
                 .Include(r => r.User)
                 .Where(r => r.Registration == null&&r.TimeSlot.AdministratorId==adminId)
                 .ToListAsync();

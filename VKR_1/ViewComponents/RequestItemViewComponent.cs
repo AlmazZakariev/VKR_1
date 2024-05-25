@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using VKR_1.Models.Registration;
+using VKR_1.Models.HomeAdmin;
 
 namespace VKR_1.ViewComponents
 {

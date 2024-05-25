@@ -1,19 +1,26 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace VKR_1.Models.Registration
 {
     public class RegistrationViewModel
     {
-        //public RegistrationViewModel(Request request)
-        //{
-        //    CurrentRequest = request;
-        //}
-        public Request? CurrentRequest { get; set; } = null!;
+        public Request? CurrentRequest { get; set; }
+        
+        public IEnumerable<short>? Floors { get; set; } = null!;
+        
+        public IEnumerable<short>? RoomNumbers { get; set; } = null!;
 
-        [Required(ErrorMessage = "Данное поле обязательно")]
-        public string Room { get; set; }
+        public IEnumerable<short>? Rooms { get; set; } = null!;
+
+        public short? SelectedFloor { get; set; }
+
+        public short? SelectedRoomNumber { get; set; }  
+
+        public long? SelectedRoom { get; set; }
+
     }
 
 }

@@ -4,6 +4,7 @@ using DAL.EfStructures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.EfStructures.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240523133351_RoomsReturn")]
+    partial class RoomsReturn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,9 +79,12 @@ namespace DAL.EfStructures.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("request_id");
 
-                    b.Property<long>("RoomId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("room_id");
+                    b.Property<string>("Room")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("room");
 
                     b.Property<byte[]>("TimeStamp")
                         .IsConcurrencyToken()
@@ -91,8 +97,6 @@ namespace DAL.EfStructures.Migrations
 
                     b.HasIndex("RequestId")
                         .IsUnique();
-
-                    b.HasIndex("RoomId");
 
                     b.ToTable("registrations");
                 });
@@ -367,18 +371,9 @@ namespace DAL.EfStructures.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_registrations_requests");
 
-                    b.HasOne("Domain.Entities.Room", "Room")
-                        .WithMany("Registrations")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_registrations_rooms");
-
                     b.Navigation("Administrator");
 
                     b.Navigation("Request");
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("Domain.Entities.Request", b =>
@@ -429,11 +424,6 @@ namespace DAL.EfStructures.Migrations
             modelBuilder.Entity("Domain.Entities.Request", b =>
                 {
                     b.Navigation("Registration");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Room", b =>
-                {
-                    b.Navigation("Registrations");
                 });
 
             modelBuilder.Entity("Domain.Entities.TimeSlot", b =>

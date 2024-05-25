@@ -59,6 +59,10 @@ public partial class User : BaseEntity
     [JsonIgnore]
     [InverseProperty("Administrator")]
     public ICollection<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
+
+    [JsonIgnore]
+    [InverseProperty("Administrator")]
+    public ICollection<Room> Rooms { get; set; } = new List<Room>();
     public override string ToString()
     {
         return $"{Surname} {Name} {Patronymic} - {(Admin[0] == 0? "СТУДЕНТ": "АДМИНИСТРАТОР")}," +

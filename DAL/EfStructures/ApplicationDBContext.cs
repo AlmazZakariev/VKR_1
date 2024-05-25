@@ -6,6 +6,7 @@ using Domain.Entities;
 using DAL.Exceptions;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Identity.Client;
 
 namespace DAL.EfStructures;
 
@@ -90,9 +91,9 @@ public partial class ApplicationDBContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_registrations_requests");
 
-            //entity.HasOne(d => d.Room).WithMany(p => p.Registrations)
-            //    .OnDelete(DeleteBehavior.Restrict)
-            //    .HasConstraintName("FK_registrations_rooms");
+            entity.HasOne(d => d.Room).WithMany(p => p.Registrations)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("FK_registrations_rooms");
         });
 
         modelBuilder.Entity<Request>(entity =>
@@ -125,6 +126,13 @@ public partial class ApplicationDBContext : DbContext
         {
             entity.Property(e => e.Properties).HasColumnType("Xml");
             entity.Property(e => e.TimeStamp).HasDefaultValueSql("GetDate()");
+        });
+
+        modelBuilder.Entity<Room>(entity =>
+        {
+            entity.HasOne(r=>r.Administrator).WithMany(p => p.Rooms)
+            .OnDelete(DeleteBehavior.Restrict)
+            .HasConstraintName("FK_rooms_users");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -29,8 +29,8 @@ namespace DAL.Tests
             //var user =  userRepo.Find(3).Result;
             //Console.WriteLine(user);
 
-            SampleDataInitializer.ClearAndReseedDataBase(connection.Context);
-            //SampleDataInitializer.InitializeData(connection.Context);
+            //SampleDataInitializer.ClearAndReseedDataBase(connection.Context);
+            SampleDataInitializer.InitializeData(connection.Context);
 
             //CreateUsers(connection.Context);
 

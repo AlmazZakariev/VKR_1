@@ -16,4 +16,7 @@ requests.forEach(request => {
         request.querySelector(`[for="test-${id}"]`).classList.add('d-none');
         regBtn.classList.remove('d-none');
     });
+
+
+    
 });

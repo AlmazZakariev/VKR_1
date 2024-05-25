@@ -1,18 +1,9 @@
 ﻿@using VKR_1.Models.HomeAdmin;
 @model HomeViewModelAdmin
 
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home - Your Application</title>
-
-    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
-    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/YourApplication.styles.css" asp-append-version="true" />
-</head>
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
 <body>
     <div class="container-fluid">
         <div class="row">
@@ -21,38 +12,9 @@
                 <div class="card">
                     <div class="card-body">
                        
-                        @foreach (var request in Model.Requests)
+                        @foreach (var registration in Model.Registrations)
                         {
-                            @* <div class="request-item"> *@
-
-                            <vc:request-item registration="@new(){CurrentRequest = request}" />
-
-
-
-                            @* <form asp-action="Register"  method="post">
-                                <input type="hidden" name="requestId" value="@request.Id" />
-                                <div class="task shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                                    <div class="d-flex justify-content-start align-items-center">
-                                        <h5 class="me-2">@request.User?.Surname</h5>
-                                        <h5 class="me-2">@request.User?.Name</h5>
-                                        <h5>@request.User?.Patronymic</h5>
-                                        <p class="ms-auto">@request.PreferenceDate?.ToString("dd.MM.yyyy")</p>
-                                    </div>
-                                    <div class="d-flex justify-content-start align-items-center">
-                                        <p class="me-5">@request.User?.Email</p>
-                                        <p>@request.User?.Phone</p>
-                                    </div>
-
-                                    <div class="form-group mb-3">
-                                        <label asp-for="Room">Введите номер комнаты</label>
-                                        <input asp-for="Room" class="form-control" type="text" />
-                                        <span asp-validation-for="Room" class="text-danger"></span>
-                                    </div>                                    
-                                    <div class="d-flex justify-content-start">
-                                        <button type="submit" class="btn btn-primary">Зарегистрировать</button>
-                                    </div>
-                                </div>
-                            </form> *@
+                            <vc:request-item registration="@registration" />
                         }
                     </div>
                 </div>
